@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Focale et cadrage</title>
+<meta name="description" content="Séance modèle du cours de sciences physiques, BTS Métiers de l'audiovisuel : de la simulation à l'exercice d'annale.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../style.css">
+<style>
+/* Mise en page de la séance : rail des temps + colonne de contenu */
+.layout{display:grid; grid-template-columns:13rem minmax(0,1fr); gap:2.5rem; align-items:start; padding-block:1.5rem}
+.rail{position:sticky; top:env(safe-area-inset-top, 0px); padding-top:.5rem}
+.rail ol{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.15rem; border-left:2px solid var(--line)}
+.rail a{display:block; text-decoration:none; color:var(--ink-soft); padding:.45rem .8rem; margin-left:-2px; border-left:2px solid transparent; font-family:"Archivo",Arial,sans-serif; font-size:.9rem; font-weight:600; line-height:1.25}
+.rail a .h{display:block; font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.75rem; font-weight:500; color:var(--accent); letter-spacing:.02em}
+.rail a:hover, .rail a.on{color:var(--navy); border-left-color:var(--accent)}
+.rail .legend{margin-top:1.2rem; font-size:.8rem; color:var(--ink-soft); line-height:1.5}
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr; gap:1rem}
+  .rail{position:static}
+  .rail ol{flex-direction:row; flex-wrap:wrap; border-left:0; gap:.4rem}
+  .rail a{border:1px solid var(--line); border-radius:999px; padding:.3rem .7rem; margin:0; background:var(--surface)}
+  .rail a .h{display:inline; margin-right:.35rem}
+  .rail .legend{display:none}
+}
+.temps{padding-block:1.6rem 1.2rem; border-top:1px solid var(--line); scroll-margin-top:1rem}
+.temps:first-of-type{border-top:0; padding-top:.4rem}
+.temps-head{display:flex; flex-wrap:wrap; align-items:baseline; gap:.4rem 1rem; margin-bottom:.9rem}
+.temps-head .clock{font-family:"IBM Plex Mono",ui-monospace,monospace; color:var(--accent); font-size:.95rem; font-weight:500}
+.temps-head h2{margin:0}
+.temps-head .mode{font-family:"Archivo",Arial,sans-serif; font-size:.78rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); border:1px solid var(--line); border-radius:999px; padding:.15em .7em; background:var(--surface)}
+.pause{display:flex; align-items:center; gap:1rem; color:var(--ink-soft); font-family:"Archivo",Arial,sans-serif; font-size:.85rem; letter-spacing:.06em; text-transform:uppercase; padding-block:.4rem}
+.pause::before,.pause::after{content:""; flex:1; border-top:1px dashed var(--line)}
+
+/* Simulation */
+.sim{background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:1rem; margin-block:1rem; box-shadow:var(--shadow)}
+.sim-grid{display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:1rem}
+@media (max-width:760px){ .sim-grid{grid-template-columns:1fr} }
+.sim canvas{width:100%; height:auto; display:block; border-radius:4px; background:var(--fond-gris)}
+.sim .cap{font-family:"Archivo",Arial,sans-serif; font-size:.78rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin:.4rem 0 .3rem}
+.ctl{display:grid; grid-template-columns:repeat(auto-fit,minmax(13rem,1fr)); gap:.8rem 1.2rem; margin-top:1rem}
+.ctl label{display:block; font-family:"Archivo",Arial,sans-serif; font-size:.85rem; font-weight:600; color:var(--navy)}
+.ctl .row{display:flex; align-items:center; gap:.6rem}
+.ctl input[type=range]{flex:1; accent-color:var(--accent); min-width:0}
+.ctl input[type=number], .ctl select{font:inherit; font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.9rem; width:6.2rem; padding:.25rem .4rem; border:1px solid var(--line); border-radius:4px; background:var(--surface); color:var(--ink)}
+.ctl select{width:100%}
+.ctl .unit{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.85rem; color:var(--ink-soft)}
+.readouts{display:grid; grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr)); gap:.6rem; margin-top:1rem}
+.ro{background:var(--fond-gris); border-radius:4px; padding:.55rem .7rem}
+.ro .k{font-family:"Archivo",Arial,sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.ro .v{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:1.05rem; color:var(--navy); font-variant-numeric:tabular-nums}
+.status{margin-top:.9rem; padding:.6rem .8rem; border-radius:4px; font-family:"Archivo",Arial,sans-serif; font-weight:600; background:var(--fond-vert); color:var(--vert)}
+.status.ko{background:var(--fond-rouge); color:var(--rouge)}
+.defis{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem}
+.defis button{font:inherit; font-family:"Archivo",Arial,sans-serif; font-weight:600; font-size:.9rem; padding:.45rem .8rem; border:1px solid var(--accent); color:var(--accent); background:var(--surface); border-radius:4px; cursor:pointer}
+.defis button:hover{background:var(--fond-bleu)}
+.defis button.ok{border-color:var(--vert); color:var(--vert); background:var(--fond-vert)}
+.defi-msg{margin-top:.6rem; font-size:.95rem; color:var(--ink-soft); min-height:1.4em}
+
+/* Figure SVG */
+.fig{background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:.8rem; margin-block:1rem; overflow-x:auto}
+.fig svg{display:block; width:100%; max-width:640px; height:auto; margin-inline:auto}
+.fig figcaption{font-size:.9rem; color:var(--ink-soft); margin-top:.5rem; max-width:64ch}
+.fig.sael img{display:block; width:100%; max-width:760px; height:auto; border-radius:4px; margin-inline:auto}
+
+/* Extrait d'annale */
+.annale{background:var(--surface); border:1px solid var(--navy); border-radius:4px; padding:1rem 1.2rem; margin-block:1rem; font-size:1rem}
+.annale .cart{display:flex; flex-wrap:wrap; justify-content:space-between; gap:.3rem 1rem; font-family:"Archivo",Arial,sans-serif; font-size:.78rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); border-bottom:1px solid var(--line); padding-bottom:.5rem; margin-bottom:.8rem}
+.annale .pb{font-weight:600; color:var(--navy)}
+.annale ol.q{padding-left:1.4rem; margin:.6rem 0}
+.annale ol.q li{margin-bottom:.5rem}
+.annale .bar{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.8rem; color:var(--ink-soft); white-space:nowrap}
+details{border:1px solid var(--line); border-radius:4px; background:var(--surface); margin-block:.8rem}
+details>summary{cursor:pointer; padding:.7rem 1rem; font-family:"Archivo",Arial,sans-serif; font-weight:700; color:var(--navy); list-style:none; display:flex; justify-content:space-between; gap:1rem}
+details>summary::after{content:"afficher"; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:700}
+details[open]>summary::after{content:"masquer"}
+details>.body{padding:0 1rem .8rem; border-top:1px solid var(--line)}
+.calc{display:grid; grid-template-columns:auto 1fr; gap:.3rem 1rem; align-items:baseline; margin:.6rem 0; font-size:.98rem}
+.calc .l{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.8rem; color:var(--accent); letter-spacing:.04em; text-transform:uppercase; white-space:nowrap}
+.steps{counter-reset:s; list-style:none; padding:0; margin:.6rem 0}
+.steps li{position:relative; padding-left:2.2rem; margin-bottom:.55rem; max-width:66ch}
+.steps li::before{counter-increment:s; content:counter(s); position:absolute; left:0; top:.05em; width:1.55rem; height:1.55rem; border-radius:50%; background:var(--navy); color:var(--paper); font-family:"Archivo",Arial,sans-serif; font-weight:700; font-size:.8rem; display:grid; place-items:center}
+:root[data-theme="dark"] .steps li::before{color:#0F1524}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .steps li::before{color:#0F1524} }
+.two{display:grid; grid-template-columns:repeat(auto-fit,minmax(17rem,1fr)); gap:1rem}
+kbd{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.85em; border:1px solid var(--line); border-bottom-width:2px; border-radius:3px; padding:.05em .4em; background:var(--surface); color:var(--navy)}
+</style>
+<script src="../config.js"></script>
+<script src="../site.js"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="t">Sciences physiques</span><span class="s">BTS Métiers de l'audiovisuel, option montage et postproduction</span></a>
+    <nav class="nav" aria-label="Navigation">
+      <a href="../index.html">Le cours</a>
+      <a href="focale.html" aria-current="page">Séance 11</a>
+      <a href="../epreuve.html">L'épreuve E3</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Première année · Séance 11 · Séance modèle</div>
+    <h1>Focale et cadrage</h1>
+    <p class="lead">Quelle focale pour cadrer ce tableau à 9 mètres ? La question est posée mot pour mot dans un sujet de BTS. On y répond avec une proportion, la taille d'un capteur et une calculatrice.</p>
+    <div class="meta">
+      <span><b>3 heures</b></span>
+      <span>Programme P4, <b>5.4 optique géométrique</b></span>
+      <span>Annales : <b>sujet zéro</b>, physique 1 et 5 · <b>session 2016</b>, physique 6</span>
+      <span>Objets : <b>une lentille, un mètre ruban, vos téléphones</b></span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap layout">
+  <aside class="rail" aria-label="Déroulé de la séance">
+    <ol>
+      <li><a href="#accueil"><span class="h">0:00</span>Accueil et objectifs</a></li>
+      <li><a href="#bouche"><span class="h">0:10</span>Mise en bouche</a></li>
+      <li><a href="#notions"><span class="h">0:40</span>Les notions</a></li>
+      <li><a href="#annale"><span class="h">1:50</span>L'annale en TD</a></li>
+      <li><a href="#cloture"><span class="h">2:45</span>Clôture</a></li>
+    </ol>
+    <p class="legend">Trois niveaux sur chaque question :<br><span class="niv socle">Socle</span> la moyenne<br><span class="niv maitrise">Maîtrise</span> deux étapes<br><span class="niv loin">Plus loin</span> pour ne pas s'ennuyer</p>
+  </aside>
+
+  <main>
+
+  <!-- ============ 0:00 ============ -->
+  <section class="temps" id="accueil">
+    <div class="temps-head"><span class="clock">0:00 · 10 min</span><h2>Accueil et objectifs</h2><span class="mode">Projection</span></div>
+
+    <div class="bloc"><div class="bt">À la fin de cette séance, vous saurez</div>
+      <ul>
+        <li>calculer la focale qu'il faut pour cadrer un objet dont vous connaissez la taille et la distance ;</li>
+        <li>calculer la taille de l'image d'un objet sur le capteur ;</li>
+        <li>calculer l'angle de champ d'un objectif, et dire si quelque chose est dans le champ ou hors champ ;</li>
+        <li>reconnaître ces trois questions dans un sujet d'examen et y répondre en trois lignes chacune.</li>
+      </ul>
+    </div>
+
+    <div class="two">
+      <div class="qr-box" id="qr-page-1">
+        <div class="qr"><span class="ph">QR généré à l'hébergement</span></div>
+        <div><div class="qr-t">Cette page sur votre téléphone</div><p class="muted" style="margin:.2rem 0 .4rem;font-size:.95rem">La simulation, le cours et l'exercice. Vous la gardez après la séance.</p><div class="qr-u" data-url-page></div></div>
+      </div>
+      <div class="qr-box pending" id="qr-nb-1">
+        <div class="qr"><span class="ph">Carnet NotebookLM<br>à venir</span></div>
+        <div><div class="qr-t">Le compagnon de la séance</div><p class="muted" style="margin:.2rem 0 .4rem;font-size:.95rem">Un podcast de 8 minutes, vingt cartes de révision, un quiz de dix questions. À écouter dans le métro, à faire avant la prochaine séance.</p><div class="qr-u" data-url-nb></div></div>
+      </div>
+    </div>
+
+    <h3>Ce que vous savez déjà, sans le savoir</h3>
+    <p>Vous parlez tous les jours de grand-angle et de longue focale, de plein format et de capteur Super 35, de <i>crop</i> en postproduction. Vous savez qu'un 24 mm ouvre le cadre et qu'un 200 mm le resserre. Ce que vous ne savez pas encore, c'est <strong>de combien</strong>. C'est exactement ce que demande l'examen, et c'est ce qu'on va chiffrer.</p>
+    <p>À la fin de l'année, l'épreuve E3 vous posera cette question sous cette forme : « déterminer la focale à utiliser pour avoir le cadre le plus serré permettant de voir le tableau en entier ». On la fera ensemble à 1 h 50.</p>
+  </section>
+
+  <!-- ============ 0:10 ============ -->
+  <section class="temps" id="bouche">
+    <div class="temps-head"><span class="clock">0:10 · 30 min</span><h2>Mise en bouche : cadrez le tableau</h2><span class="mode">Simulation + manipulation</span></div>
+
+    <p>La simulation est projetée, et ouverte sur vos téléphones. Trois défis, pas de formule : trouvez la focale à la main, en regardant le cadre. La formule viendra après, pour expliquer ce que vos doigts ont trouvé.</p>
+
+    <div class="sim" id="sim">
+      <div class="sim-grid">
+        <div>
+          <div class="cap">Vue de dessus, pas à l'échelle</div>
+          <canvas id="vue" width="900" height="420" aria-label="Vue de dessus : la caméra, le cône de champ et l'objet"></canvas>
+        </div>
+        <div>
+          <div class="cap">Ce que voit le capteur</div>
+          <canvas id="cadre" width="480" height="420" aria-label="Le cadre du capteur et l'image de l'objet"></canvas>
+        </div>
+      </div>
+
+      <div class="ctl">
+        <div>
+          <label for="f">Focale <span class="unit">f</span></label>
+          <div class="row"><input type="range" id="f" min="8" max="400" step="1" value="50"><input type="number" id="fn" min="8" max="1400" step="1" value="50"><span class="unit">mm</span></div>
+        </div>
+        <div>
+          <label for="d">Distance caméra-objet <span class="unit">D</span></label>
+          <div class="row"><input type="range" id="d" min="0.5" max="50" step="0.1" value="9"><input type="number" id="dn" min="0.1" max="2000" step="0.1" value="9"><span class="unit">m</span></div>
+        </div>
+        <div>
+          <label for="capteur">Capteur</label>
+          <select id="capteur">
+            <option value="26.2,13.8" selected>Super 35 · 26,2 × 13,8 mm (EOS C500, sujet zéro)</option>
+            <option value="9.6,5.4">2/3 de pouce · 9,6 × 5,4 mm (caméra broadcast, session 2016)</option>
+            <option value="36,24">Plein format · 36 × 24 mm</option>
+            <option value="17.3,13">Micro 4/3 · 17,3 × 13 mm</option>
+            <option value="7.6,5.7">Téléphone · 7,6 × 5,7 mm</option>
+          </select>
+        </div>
+        <div>
+          <label for="objet">Objet à cadrer</label>
+          <select id="objet">
+            <option value="2.5,1.5" selected>Le tableau · 2,5 × 1,5 m</option>
+            <option value="0.6,0.316">Le détail du tableau · 60 × 31,6 cm</option>
+            <option value="2.0,1.0">Une voiture de face · 2,0 × 1,0 m</option>
+            <option value="4.7,1.0">Une voiture de profil · 4,7 × 1,0 m</option>
+            <option value="1.7,0.5">Un visage et des épaules · 1,7 × 0,5 m</option>
+            <option value="0.21,0.297">Une feuille A4 · 21 × 29,7 cm</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="readouts">
+        <div class="ro"><div class="k">Image sur le capteur</div><div class="v" id="ro-img">–</div></div>
+        <div class="ro"><div class="k">Part du cadre</div><div class="v" id="ro-part">–</div></div>
+        <div class="ro"><div class="k">Angle de champ H × V</div><div class="v" id="ro-angle">–</div></div>
+        <div class="ro"><div class="k">Champ cadré à D</div><div class="v" id="ro-champ">–</div></div>
+      </div>
+      <div class="status" id="status">–</div>
+
+      <div class="defis">
+        <button type="button" data-defi="1">Défi 1 · le tableau entier, au plus serré</button>
+        <button type="button" data-defi="2">Défi 2 · le détail de 60 cm</button>
+        <button type="button" data-defi="3">Défi 3 · la voiture de profil aux deux tiers, à 30 m</button>
+      </div>
+      <div class="defi-msg" id="defi-msg">Choisissez un défi : la simulation se règle sur la situation du sujet, à vous de trouver la focale.</div>
+    </div>
+
+    <h3>Puis la même chose avec vos téléphones</h3>
+    <ol class="steps">
+      <li>Caméra principale, sans zoom. Une feuille A4 tenue droite par un voisin, 21 cm de large.</li>
+      <li>Reculez jusqu'à ce que la feuille remplisse <strong>exactement</strong> la largeur de l'image. Mesurez la distance au mètre ruban.</li>
+      <li>Notez au tableau : prénom, modèle du téléphone, distance mesurée. Une ligne par personne.</li>
+      <li>On calcule ensemble, pour chacun, le rapport 0,21 / distance. Puis on le compare à la focale « équivalente » annoncée par le fabricant. On y revient dans une heure, quand on aura la formule.</li>
+    </ol>
+    <div class="bloc attention"><div class="bt">Attention</div><p>Un téléphone annoncé « 26 mm » n'a pas une focale de 26 mm : sa focale réelle est autour de 6 mm, sur un capteur de 7 à 9 mm de large. Le « 26 mm » est la focale qui donnerait le même cadre sur un capteur de 36 mm. C'est la première chose qu'on va comprendre.</p></div>
+  </section>
+
+  <!-- ============ 0:40 ============ -->
+  <section class="temps" id="notions">
+    <div class="temps-head"><span class="clock">0:40 · 60 min</span><h2>Les notions, de la manipulation à la formule</h2><span class="mode">Tableau</span></div>
+
+    <h3>1. La lumière va tout droit <span class="niv socle">Socle</span></h3>
+    <p>Une boîte fermée, un trou d'épingle, du calque au fond : l'image de la fenêtre apparaît, renversée. Aucune lentille. Chaque point de la scène envoie un rayon par le trou, et ce rayon continue tout droit jusqu'au fond de la boîte. Plus la boîte est profonde, plus l'image est grande. <strong>La profondeur de la boîte joue le rôle de la focale.</strong></p>
+
+    <h3>2. La lentille : même géométrie, plus de lumière <span class="niv socle">Socle</span></h3>
+    <p>La lentille remplace le trou d'épingle : elle laisse entrer beaucoup plus de lumière et ramène tous les rayons d'un même point au même endroit. Quand l'objet est loin, c'est-à-dire dès que la distance dépasse une vingtaine de fois la focale, ce qui est toujours vrai en plateau, l'image se forme dans le <strong>plan focal</strong>, à la distance <i>f</i> derrière la lentille. Et le rayon qui passe par le centre de la lentille n'est pas dévié : c'est lui qui donne la géométrie.</p>
+
+    <figure class="fig">
+      <svg viewBox="0 0 640 260" role="img" aria-labelledby="figt">
+        <title id="figt">Un objet de hauteur h à la distance D, son image de hauteur h' dans le plan focal, à la distance f derrière la lentille</title>
+        <g stroke="currentColor" fill="none" stroke-width="1.5" color="#5A5A64">
+          <line x1="30" y1="150" x2="610" y2="150" stroke-dasharray="4 4"/>
+        </g>
+        <!-- lentille -->
+        <g stroke="#005AAA" stroke-width="3" fill="none"><line x1="200" y1="60" x2="200" y2="240"/><path d="M192 66 L200 58 L208 66 M192 234 L200 242 L208 234"/></g>
+        <!-- objet -->
+        <g stroke="#146E3C" stroke-width="3" fill="#146E3C"><line x1="560" y1="150" x2="560" y2="70"/><path d="M552 80 L560 68 L568 80 Z"/></g>
+        <!-- image -->
+        <g stroke="#AA1E19" stroke-width="3" fill="#AA1E19"><line x1="130" y1="150" x2="130" y2="178"/><path d="M122 168 L130 180 L138 168 Z"/></g>
+        <!-- capteur -->
+        <rect x="126" y="112" width="8" height="76" fill="#14284F" opacity=".12"/>
+        <!-- rayons -->
+        <g stroke="#B07008" stroke-width="1.6" fill="none"><line x1="560" y1="70" x2="130" y2="178"/><line x1="560" y1="70" x2="200" y2="70"/><line x1="200" y1="70" x2="130" y2="178"/></g>
+        <!-- cotes -->
+        <g font-family="Archivo, Arial, sans-serif" font-size="14" font-weight="700">
+          <text x="572" y="112" fill="#146E3C">h</text>
+          <text x="140" y="172" fill="#AA1E19">h′</text>
+          <text x="200" y="40" fill="#005AAA" text-anchor="middle">lentille, centre O</text>
+          <text x="130" y="100" fill="#14284F" text-anchor="middle">capteur</text>
+        </g>
+        <g font-family="IBM Plex Mono, monospace" font-size="13" fill="#5A5A64">
+          <line x1="200" y1="220" x2="560" y2="220" stroke="#5A5A64" stroke-width="1"/><text x="380" y="238" text-anchor="middle">D</text>
+          <line x1="130" y1="205" x2="200" y2="205" stroke="#5A5A64" stroke-width="1"/><text x="165" y="200" text-anchor="middle">f</text>
+        </g>
+      </svg>
+      <figcaption>Le rayon qui passe par O (en ambre) n'est pas dévié. Les deux triangles qu'il forme de part et d'autre de la lentille ont les mêmes angles : leurs côtés sont proportionnels.</figcaption>
+    </figure>
+
+    <h3>3. La proportion <span class="niv socle">Socle</span></h3>
+    <p>Deux triangles semblables, un de chaque côté de la lentille. Leurs côtés sont dans le même rapport :</p>
+    <div class="formule">
+      <math display="block"><mfrac><msup><mi>h</mi><mo>′</mo></msup><mi>f</mi></mfrac><mo>=</mo><mfrac><mi>h</mi><mi>D</mi></mfrac></math>
+      <span class="legende"><i>h</i> taille de l'objet et <i>D</i> sa distance, en mètres ; <i>h′</i> taille de l'image et <i>f</i> la focale, en millimètres.</span>
+    </div>
+    <p>Ce qui se réécrit dans les deux sens qui servent à l'examen :</p>
+    <div class="formule">
+      <math display="block"><msup><mi>h</mi><mo>′</mo></msup><mo>=</mo><mi>h</mi><mo>×</mo><mfrac><mi>f</mi><mi>D</mi></mfrac></math>
+      <span class="legende">la taille de l'image, quand on connaît la focale</span>
+    </div>
+    <div class="formule">
+      <math display="block"><mi>f</mi><mo>=</mo><mi>D</mi><mo>×</mo><mfrac><msup><mi>h</mi><mo>′</mo></msup><mi>h</mi></mfrac></math>
+      <span class="legende">la focale, quand on sait quelle taille d'image on veut</span>
+    </div>
+    <div class="bloc retenir"><div class="bt">À retenir</div><p><strong>La focale multiplie, la distance divise.</strong> Doubler la focale double l'image. Doubler la distance la divise par deux. Les mètres vont avec les mètres, les millimètres avec les millimètres : chaque fraction est un nombre sans unité.</p></div>
+    <p>Retour aux téléphones : le rapport 0,21 / distance que vous avez mesuré, c'est <i>h</i> / <i>D</i>. Il est donc égal à <i>h′</i> / <i>f</i>, la largeur du capteur sur la focale. Pour un téléphone qui annonce « 26 mm équivalent », on attend 36 / 26 = 1,38, soit une feuille qui remplit l'image à 0,21 / 1,38 = 15 cm. Comparez avec vos mesures : l'écart, en général sous 10 %, vient du recadrage automatique que fait l'appareil.</p>
+
+    <h3>4. Deux dimensions, deux calculs, une seule réponse <span class="niv maitrise">Maîtrise</span></h3>
+    <p>Un capteur a une largeur et une hauteur. Un tableau aussi. Le cadre le plus serré qui montre tout le tableau, c'est celui où <strong>l'une des deux dimensions remplit exactement le capteur</strong>, et l'autre a de la marge. On calcule donc la focale deux fois, en largeur et en hauteur, et on garde <strong>la plus petite</strong>. La plus grande couperait l'autre dimension. Vous l'avez vu dans le défi 1 : à 94 mm la largeur est parfaite et le haut du tableau est coupé.</p>
+
+    <h3>5. L'angle de champ <span class="niv maitrise">Maîtrise</span></h3>
+    <p>L'angle de champ, c'est l'ouverture du cône que voit la caméra. Il ne dépend que de la focale et du capteur, jamais de la distance. Sur la figure, la moitié du capteur et la focale forment un triangle rectangle :</p>
+    <div class="formule">
+      <math display="block"><mi>α</mi><mo>=</mo><mn>2</mn><mo>×</mo><mi>arctan</mi><mrow><mo>(</mo><mfrac><mi>L</mi><mrow><mn>2</mn><mi>f</mi></mrow></mfrac><mo>)</mo></mrow></math>
+      <span class="legende"><i>L</i> largeur (ou hauteur) du capteur, <i>f</i> focale, dans la même unité. Résultat en degrés, calculatrice en mode degrés.</span>
+    </div>
+    <p>Exemple du sujet zéro : capteur de 26,2 mm, focale de 70 mm. α = 2 × arctan(26,2 / 140) = 2 × 10,6° = 21,2°. À 20 m, ce cône fait 2 × 20 × tan(10,6°) = 7,5 m de large. Un micro placé à 4,5 m de l'axe est hors champ.</p>
+    <div class="bloc gris"><div class="bt">Le geste calculatrice du jour</div>
+      <p>Mode degrés d'abord : <kbd>SHIFT</kbd> <kbd>MENU</kbd> ou <kbd>MODE</kbd>, puis <i>Deg</i>. Ensuite, tout le monde tape en même temps :</p>
+      <p><kbd>2</kbd> <kbd>×</kbd> <kbd>SHIFT</kbd> <kbd>tan</kbd> <kbd>(</kbd> <kbd>26.2</kbd> <kbd>÷</kbd> <kbd>140</kbd> <kbd>)</kbd> <kbd>=</kbd></p>
+      <p>Résultat attendu : <span class="num">21,2</span>. Si vous lisez 0,37, vous êtes en radians.</p>
+    </div>
+
+    <h3>6. Pour aller plus loin <span class="niv loin">Plus loin</span></h3>
+    <div class="two">
+      <div class="card">
+        <h3>Le crop factor, chiffré</h3>
+        <p>À focale égale, un capteur deux fois moins large donne un cadre exactement deux fois plus serré, puisque le champ vaut D × L / f. L'angle se resserre aussi, mais pas exactement de moitié : 21,2° deviennent 10,7° sur une longue focale, ce qui fait bien un facteur 2, alors que 90° ne deviennent que 53° sur un grand-angle. C'est le cadre qu'on compte, pas l'angle. « Équivalent 26 mm » sur un téléphone veut dire : la focale qui, sur 36 mm de large, cadrerait pareil. Le facteur vaut 36 / largeur du capteur : 1,37 pour le Super 35, 3,75 pour le 2/3 de pouce.</p>
+      </div>
+      <div class="card">
+        <h3>En postproduction</h3>
+        <p>Recadrer une image à 80 % en montage, c'est utiliser un capteur 20 % plus petit : même perspective, cadre plus serré, comme une focale 1,25 fois plus longue. La stabilisation logicielle fait la même chose. Ce n'est pas un zoom : la perspective ne change pas, seule la focale la change.</p>
+      </div>
+      <div class="card">
+        <h3>Quand l'objet est proche</h3>
+        <p>La proportion suppose l'image dans le plan focal. Pour un objet proche, l'image recule un peu derrière : c'est la mise au point. La formule complète est la relation de conjugaison,
+        <math><mfrac><mn>1</mn><mrow><mover><mrow><mi>O</mi><msup><mi>A</mi><mo>′</mo></msup></mrow><mo>¯</mo></mover></mrow></mfrac><mo>−</mo><mfrac><mn>1</mn><mrow><mover><mrow><mi>O</mi><mi>A</mi></mrow><mo>¯</mo></mover></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><msup><mi>f</mi><mo>′</mo></msup></mfrac></math>, qu'on verra à la séance suivante avec le banc d'optique.</p>
+      </div>
+    </div>
+
+    <h3>Une lentille ouverte, à manipuler chez vous</h3>
+    <figure class="fig sael">
+      <a href="https://sael.net/plane-of-focus/"><img src="../img/plane_of_focus_sael.jpg" alt="Capture de la page The Plane of Focus : un objectif démonté en 3D, le plan image derrière, le plan de mise au point devant, la zone de netteté affichée" loading="lazy"></a>
+      <figcaption><a href="https://sael.net/plane-of-focus/"><strong>The Plane of Focus, a lens opened up</strong></a>, par Ryan Sael. Une bague de mise au point, un diaphragme de f/2 à f/16, et l'objectif qui se démonte sous vos yeux. On voit le plan image derrière la lentille, le plan de mise au point devant, et la zone de netteté qui s'élargit quand on ferme le diaphragme. En anglais, gratuit, sans installation. C'est la porte d'entrée de la séance 12.</figcaption>
+    </figure>
+  </section>
+
+  <div class="pause">1:40 · pause 10 min</div>
+
+  <!-- ============ 1:50 ============ -->
+  <section class="temps" id="annale">
+    <div class="temps-head"><span class="clock">1:50 · 55 min</span><h2>L'annale, en travaux dirigés</h2><span class="mode">TD + tableau</span></div>
+
+    <p>L'extrait est distribué sur une feuille. <strong>Dix minutes seul</strong>, calculatrice en main, sans aide. Puis une question à la fois : un étudiant au tableau, les autres vérifient sur leur feuille. On corrige ensemble, et chacun note le barème qu'il aurait obtenu.</p>
+
+    <div class="annale">
+      <div class="cart"><span>BTS Métiers de l'audiovisuel · Épreuve E3 · Sujet zéro, option métiers de l'image</span><span>Partie 2 physique · 1. Choix de focale</span></div>
+      <p class="pb">Problématique : déterminer si l'objectif dont vous disposez vous permettra de réaliser les prises de vues souhaitées par la production.</p>
+      <p>Vous souhaitez filmer un tableau de dimensions 2,5 m × 1,5 m avec la caméra dont le capteur a pour dimensions 26,2 mm × 13,8 mm. La distance D = 9 m de la caméra au tableau est suffisamment grande pour supposer que l'image se forme dans le plan focal image de la caméra.</p>
+      <ol class="q">
+        <li>1.1 Déterminer la focale <i>f</i> à utiliser pour avoir le cadre le plus serré permettant de voir le tableau en entier. <span class="niv socle">Socle</span> <span class="bar">4 pts</span></li>
+        <li>1.2 Déterminer la focale <i>f′</i> permettant d'effectuer un zoom sur un détail du tableau de dimensions 60 cm × 31,6 cm. <span class="niv socle">Socle</span> <span class="bar">3 pts</span></li>
+        <li>1.3 Le zoom dont les caractéristiques sont données dans le document 11 (Canon CN-E 30-105 mm T2.8) vous permet-il de réaliser ces prises de vues ? <span class="niv maitrise">Maîtrise</span> <span class="bar">2 pts</span></li>
+      </ol>
+      <p class="muted" style="font-size:.9rem;margin:0">Le barème est indicatif, il est le mien. Les sujets officiels ne le publient pas.</p>
+    </div>
+
+    <h3>Le déroulé au tableau</h3>
+    <ol class="steps">
+      <li><strong>Lire la problématique à voix haute</strong> et la reformuler : « est-ce que mon zoom suffit ? ». Tout le reste sert à répondre à ça.</li>
+      <li><strong>Sortir les données</strong> et les écrire en colonne avec leurs unités : tableau 2,5 × 1,5 m, capteur 26,2 × 13,8 mm, D = 9 m. Repérer l'indice donné par le sujet : « l'image se forme dans le plan focal », donc la proportion s'applique.</li>
+      <li><strong>Question 1.1, en largeur</strong> : un premier étudiant écrit la formule en lettres, puis avec les nombres.</li>
+      <li><strong>Question 1.1, en hauteur</strong> : un deuxième étudiant. Puis la classe tranche : laquelle des deux focales on garde, et pourquoi.</li>
+      <li><strong>Question 1.2</strong> : un troisième étudiant fait les deux calculs. Ils tombent sur la même valeur : pourquoi ?</li>
+      <li><strong>Question 1.3</strong> : la phrase de conclusion, écrite par un quatrième. Sans phrase, pas de point.</li>
+    </ol>
+
+    <details>
+      <summary>Correction de l'extrait du sujet zéro</summary>
+      <div class="body">
+        <h3>1.1 Le cadre le plus serré qui montre tout le tableau</h3>
+        <div class="calc">
+          <span class="l">Formule</span><span><math><mi>f</mi><mo>=</mo><mi>D</mi><mo>×</mo><mfrac><msup><mi>h</mi><mo>′</mo></msup><mi>h</mi></mfrac></math></span>
+          <span class="l">Largeur</span><span class="num">f = 9000 mm × 26,2 / 2500 = 94,3 mm</span>
+          <span class="l">Hauteur</span><span class="num">f = 9000 mm × 13,8 / 1500 = 82,8 mm</span>
+          <span class="l">Réponse</span><span>On garde <strong>f ≈ 83 mm</strong>. C'est la hauteur qui remplit le capteur en premier : à 94 mm, l'image du tableau ferait 15,7 mm de haut sur un capteur de 13,8 mm, le haut et le bas seraient coupés.</span>
+        </div>
+        <h3>1.2 Le détail de 60 × 31,6 cm</h3>
+        <div class="calc">
+          <span class="l">Largeur</span><span class="num">f′ = 9000 × 26,2 / 600 = 393 mm</span>
+          <span class="l">Hauteur</span><span class="num">f′ = 9000 × 13,8 / 316 = 393 mm</span>
+          <span class="l">Réponse</span><span><strong>f′ ≈ 393 mm.</strong> Les deux calculs coïncident parce que le détail a les proportions du capteur, 1,9 pour 1. Le sujet l'a choisi exprès.</span>
+        </div>
+        <h3>1.3 Le zoom 30-105 mm</h3>
+        <p><strong>Oui pour le tableau entier</strong> : 83 mm est dans la plage 30 à 105 mm. <strong>Non pour le détail</strong> : 393 mm dépasse 105 mm. Pour cadrer le détail avec ce zoom à 105 mm, il faudrait rapprocher la caméra à 9 × 105 / 393 = 2,4 m, ce qui change la perspective. Sinon, un autre objectif.</p>
+        <div class="bloc attention"><div class="bt">Ce qui coûte des points sur cette question</div>
+          <ul>
+            <li>Mélanger 9 m et 26,2 mm dans la même fraction sans convertir : la focale sort en unité fantaisiste.</li>
+            <li>Ne faire qu'un calcul, en largeur, et répondre 94 mm : la question dit « en entier ».</li>
+            <li>Répondre « oui » ou « non » à la 1.3 sans dire pour laquelle des deux focales.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <h3>Pour ceux qui ont fini : la session 2016 <span class="niv loin">Plus loin</span></h3>
+    <div class="annale">
+      <div class="cart"><span>BTS Métiers de l'audiovisuel · Épreuve E3 · Session 2016, option ingénierie et exploitation</span><span>Partie 2 physique · 6. Étude de prises de vues</span></div>
+      <p class="pb">Problématique : choisir la focale, réaliser un cadrage adapté.</p>
+      <p>Captation des 24 Heures du Mans. Une caméra est positionnée dans le prolongement d'une grande ligne droite qui se termine par un virage. Elle est équipée d'un zoom Canon Digisuper 80, considéré comme une lentille mince convergente. Le véhicule mesure 2,00 m de large, 4,70 m de long et 1,00 m de hauteur. Les dimensions du capteur sont 9,6 mm × 5,4 mm.</p>
+      <ol class="q">
+        <li>6.1 La voiture se présente de face à 1 500 m. Le zoom est réglé sur la focale maximale avec le doubleur. Relever la focale maximale et vérifier par le calcul la valeur de l'angle de champ horizontal. <span class="niv maitrise">Maîtrise</span></li>
+        <li>6.2 Calculer la hauteur et la largeur de l'image de la voiture sur le capteur. <span class="niv socle">Socle</span></li>
+        <li>6.3 Dans le virage, à 30 m, la voiture apparaît de profil et doit occuper les deux tiers de l'image. Calculer la focale nécessaire. <span class="niv maitrise">Maîtrise</span></li>
+      </ol>
+    </div>
+    <details>
+      <summary>Correction de l'extrait de 2016</summary>
+      <div class="body">
+        <p class="muted" style="font-size:.9rem">L'annexe 20 manque au PDF du dossier : les valeurs du Digisuper 80 (8,8 à 700 mm, doubleur ×2) viennent de la fiche Canon, à vérifier sur le sujet complet.</p>
+        <div class="calc">
+          <span class="l">6.1</span><span class="num">f max = 700 × 2 = 1400 mm ; α = 2 × arctan(9,6 / 2800) = 0,39°</span>
+          <span class="l">6.2</span><span class="num">largeur = 2,00 m × 1400 / 1500 = 1,87 mm ; hauteur = 1,00 × 1400 / 1500 = 0,93 mm</span>
+          <span class="l">6.3</span><span class="num">image visée = 2/3 × 9,6 = 6,4 mm ; f = 30 m × 6,4 / 4,70 = 41 mm</span>
+        </div>
+        <p>À 1400 mm, la voiture occupe un cinquième de la largeur du capteur. C'est le plan « bout de ligne droite » qu'on voit à la télévision, avec l'écrasement de perspective qui va avec.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 2:45 ============ -->
+  <section class="temps" id="cloture">
+    <div class="temps-head"><span class="clock">2:45 · 15 min</span><h2>Clôture</h2><span class="mode">Projection</span></div>
+
+    <div class="bloc retenir"><div class="bt">À retenir, en trois lignes</div>
+      <ol>
+        <li><strong>h′ / f = h / D.</strong> Mètres avec mètres, millimètres avec millimètres.</li>
+        <li><strong>Deux calculs, largeur et hauteur.</strong> Pour tout cadrer, on garde la plus petite focale.</li>
+        <li><strong>α = 2 arctan(L / 2f)</strong>, en degrés. L'angle ne dépend pas de la distance, le champ cadré si.</li>
+      </ol>
+    </div>
+
+    <div class="bloc acquis"><div class="bt">Vérifiez vos acquis, à l'oral, en deux minutes</div>
+      <ul>
+        <li>Je double la distance et je double la focale : que devient l'image ?</li>
+        <li>Même focale, capteur deux fois plus petit : l'angle de champ est-il plus large ou plus étroit ?</li>
+        <li>Pourquoi le sujet précise-t-il que « l'image se forme dans le plan focal » ?</li>
+      </ul>
+    </div>
+
+    <div class="two">
+      <div class="qr-box pending" id="qr-nb-2">
+        <div class="qr"><span class="ph">Carnet NotebookLM<br>à venir</span></div>
+        <div><div class="qr-t">D'ici la prochaine séance</div><p class="muted" style="margin:.2rem 0 .4rem;font-size:.95rem">Écoutez le podcast dans les transports. Faites le quiz une fois : le score n'est pas noté, il vous dit où vous en êtes. Les cartes servent la veille de l'épreuve.</p><div class="qr-u" data-url-nb></div></div>
+      </div>
+      <div class="qr-box" id="qr-page-2">
+        <div class="qr"><span class="ph">QR généré à l'hébergement</span></div>
+        <div><div class="qr-t">Cette page</div><p class="muted" style="margin:.2rem 0 .4rem;font-size:.95rem">La simulation reste ouverte. Refaites les trois défis sans regarder la correction.</p><div class="qr-u" data-url-page></div></div>
+      </div>
+    </div>
+
+    <h3>La séance suivante part de votre question</h3>
+    <p>Dans le sujet zéro, juste après le choix de focale, on lit : « la mise au point est faite à l'infini, la profondeur de champ s'étend de l'infini au point B ». Pourquoi une image est-elle nette de 20 m à l'infini, et floue avant ? Jouez avec la bague de mise au point et le diaphragme de <a href="https://sael.net/plane-of-focus/">la lentille en 3D</a> ci-dessus : vous verrez la zone de netteté bouger. C'est la séance 12, avec le jeu de diaphragmes et un objectif démonté sur la table.</p>
+  </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Jacques Gastebois · sciences physiques, BTS Métiers de l'audiovisuel</span>
+    <span>Sources : référentiel BTS MAV, annexe I, P4 5.4 · sujet zéro option image, partie 2, 1 et 5 · session 2016 option TIEE, partie 2, 6</span>
+  <span>© Jacques Gastebois, 2026. Document de travail communiqué dans le cadre d'une candidature, à ne pas rediffuser.</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+// ---------- Ressources de la séance : coller ici le lien du carnet NotebookLM partagé ----------
+const RESSOURCES = {
+  notebook: "https://notebook.google.com/notebook/8d2ff8fb-cff0-4946-b4ff-cbd22655dc64"
+};
+
+// ---------- QR codes ----------
+function svgQR(text){
+  try{
+    const q = qrcode(0, 'M'); q.addData(text); q.make();
+    return q.createSvgTag({cellSize: 4, margin: 0, scalable: true});
+  }catch(e){ return null; }
+}
+function fillQR(boxId, url, pendingText){
+  const box = document.getElementById(boxId); if(!box) return;
+  const qr = box.querySelector('.qr'); const u = box.querySelector('.qr-u');
+  if(url){
+    const svg = svgQR(url);
+    if(svg){ qr.innerHTML = svg; box.classList.remove('pending'); }
+    else { qr.innerHTML = '<span class="ph">QR indisponible</span>'; }
+    u.textContent = url;
+  } else {
+    qr.innerHTML = '<span class="ph">'+pendingText+'</span>';
+    u.textContent = '';
+  }
+}
+(function(){
+  const here = (location.protocol === 'http:' || location.protocol === 'https:') ? location.href.split('#')[0] : '';
+  fillQR('qr-page-1', here, 'QR généré à l\'hébergement');
+  fillQR('qr-page-2', here, 'QR généré à l\'hébergement');
+  fillQR('qr-nb-1', RESSOURCES.notebook, 'Carnet NotebookLM<br>à venir');
+  fillQR('qr-nb-2', RESSOURCES.notebook, 'Carnet NotebookLM<br>à venir');
+})();
+
+// ---------- Simulation ----------
+const $ = id => document.getElementById(id);
+const st = { f: 50, d: 9, sw: 26.2, sh: 13.8, ow: 2.5, oh: 1.5, defi: 0 };
+const fmt = (x, n) => x.toLocaleString('fr-FR', {minimumFractionDigits: n, maximumFractionDigits: n});
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+function readInputs(){
+  st.f = +$('fn').value; st.d = +$('dn').value;
+  [st.sw, st.sh] = $('capteur').value.split(',').map(Number);
+  [st.ow, st.oh] = $('objet').value.split(',').map(Number);
+}
+function model(){
+  const iw = st.ow * st.f / st.d, ih = st.oh * st.f / st.d;      // mm sur le capteur
+  const aH = 2 * Math.atan(st.sw / (2 * st.f)) * 180 / Math.PI;
+  const aV = 2 * Math.atan(st.sh / (2 * st.f)) * 180 / Math.PI;
+  const cw = st.d * st.sw / st.f, ch = st.d * st.sh / st.f;      // champ cadré en m
+  return { iw, ih, aH, aV, cw, ch, pw: iw / st.sw, ph: ih / st.sh };
+}
+function setupCanvas(c){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = c.clientWidth || c.width, h = Math.round(w * c.height / c.width);
+  if(c.width !== Math.round(w*dpr)){ c.width = Math.round(w*dpr); c.height = Math.round(h*dpr); }
+  const ctx = c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); return {ctx, w, h};
+}
+function drawVue(m){
+  const {ctx, w, h} = setupCanvas($('vue'));
+  const ink = css('--ink'), soft = css('--ink-soft'), acc = css('--accent'), navy = css('--navy'), vert = css('--vert'), rouge = css('--rouge'), line = css('--line');
+  ctx.clearRect(0,0,w,h);
+  const camX = 60, objX = w - 150, axisY = h/2;
+  // axe optique
+  ctx.strokeStyle = line; ctx.setLineDash([4,4]); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(20, axisY); ctx.lineTo(w-20, axisY); ctx.stroke(); ctx.setLineDash([]);
+  // cône de champ : demi-largeur à l'objet = cw/2 ; échelle verticale : l'objet le plus grand des deux occupe 0.42 h
+  const half = m.cw/2, maxHalf = Math.max(half, st.ow/2, 0.01);
+  const scale = (h*0.42) / maxHalf;
+  const coneY = half * scale;
+  ctx.fillStyle = acc; ctx.globalAlpha = 0.10;
+  ctx.beginPath(); ctx.moveTo(camX, axisY); ctx.lineTo(objX, axisY - coneY); ctx.lineTo(objX, axisY + coneY); ctx.closePath(); ctx.fill();
+  ctx.globalAlpha = 1; ctx.strokeStyle = acc; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(camX, axisY); ctx.lineTo(objX, axisY - coneY); ctx.moveTo(camX, axisY); ctx.lineTo(objX, axisY + coneY); ctx.stroke();
+  // caméra
+  ctx.fillStyle = navy; ctx.fillRect(camX-38, axisY-16, 30, 32); ctx.fillRect(camX-10, axisY-8, 12, 16);
+  // objet (vu de dessus : sa largeur)
+  const oy = (st.ow/2) * scale, fits = m.pw <= 1.01 && m.ph <= 1.01;
+  ctx.strokeStyle = fits ? vert : rouge; ctx.lineWidth = 5;
+  ctx.beginPath(); ctx.moveTo(objX, axisY - oy); ctx.lineTo(objX, axisY + oy); ctx.stroke();
+  // cotes
+  ctx.fillStyle = soft; ctx.font = '500 13px "IBM Plex Mono", monospace'; ctx.textAlign = 'center';
+  ctx.fillText('D = ' + fmt(st.d, st.d < 10 ? 1 : 0) + ' m', (camX+objX)/2, h - 14);
+  ctx.strokeStyle = soft; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(camX, h-28); ctx.lineTo(objX, h-28); ctx.stroke();
+  ctx.textAlign = 'left'; ctx.fillStyle = ink;
+  ctx.fillText('champ ' + fmt(m.cw, 2) + ' m', objX + 12, Math.max(14, axisY - coneY - 6));
+  ctx.fillStyle = fits ? vert : rouge;
+  ctx.fillText('objet ' + fmt(st.ow, 2) + ' m', objX + 12, Math.min(h - 6, axisY + Math.max(oy, coneY) + 16));
+  ctx.fillStyle = soft; ctx.font = '700 12px Archivo, Arial, sans-serif';
+  ctx.fillText('f = ' + st.f + ' mm  ·  α = ' + fmt(m.aH,1) + '°', camX - 38, axisY - 26);
+}
+function drawCadre(m){
+  const {ctx, w, h} = setupCanvas($('cadre'));
+  const soft = css('--ink-soft'), navy = css('--navy'), vert = css('--vert'), rouge = css('--rouge'), surf = css('--surface');
+  ctx.clearRect(0,0,w,h);
+  // cadre du capteur, au ratio réel
+  const pad = 26, ar = st.sw/st.sh; let fw = w - 2*pad, fh = fw/ar; if(fh > h - 2*pad){ fh = h - 2*pad; fw = fh*ar; }
+  const fx = (w-fw)/2, fy = (h-fh)/2;
+  ctx.fillStyle = surf; ctx.fillRect(fx, fy, fw, fh);
+  ctx.strokeStyle = navy; ctx.lineWidth = 2; ctx.strokeRect(fx, fy, fw, fh);
+  // image de l'objet, centrée, coupée si elle dépasse
+  const iw = m.pw * fw, ih = m.ph * fh;
+  const ix = fx + (fw-iw)/2, iy = fy + (fh-ih)/2;
+  const fits = m.pw <= 1.01 && m.ph <= 1.01;
+  ctx.save(); ctx.beginPath(); ctx.rect(fx, fy, fw, fh); ctx.clip();
+  ctx.fillStyle = fits ? vert : rouge; ctx.globalAlpha = 0.18; ctx.fillRect(ix, iy, iw, ih); ctx.globalAlpha = 1;
+  ctx.strokeStyle = fits ? vert : rouge; ctx.lineWidth = 2; ctx.strokeRect(ix, iy, iw, ih);
+  // diagonales pour figurer le tableau
+  ctx.lineWidth = 1; ctx.globalAlpha = .5; ctx.beginPath(); ctx.moveTo(ix,iy); ctx.lineTo(ix+iw,iy+ih); ctx.moveTo(ix+iw,iy); ctx.lineTo(ix,iy+ih); ctx.stroke(); ctx.globalAlpha = 1;
+  ctx.restore();
+  ctx.fillStyle = soft; ctx.font = '500 12px "IBM Plex Mono", monospace'; ctx.textAlign = 'center';
+  ctx.fillText(fmt(st.sw,1) + ' mm', fx + fw/2, fy - 8);
+  ctx.save(); ctx.translate(fx - 8, fy + fh/2); ctx.rotate(-Math.PI/2); ctx.fillText(fmt(st.sh,1) + ' mm', 0, 0); ctx.restore();
+  ctx.fillStyle = fits ? vert : rouge; ctx.font = '700 13px Archivo, Arial, sans-serif';
+  ctx.fillText(fmt(m.iw, 2) + ' × ' + fmt(m.ih, 2) + ' mm', fx + fw/2, fy + fh + 18);
+}
+function render(){
+  readInputs(); const m = model();
+  drawVue(m); drawCadre(m);
+  $('ro-img').textContent = fmt(m.iw,2) + ' × ' + fmt(m.ih,2) + ' mm';
+  $('ro-part').textContent = fmt(m.pw*100,0) + ' % × ' + fmt(m.ph*100,0) + ' %';
+  $('ro-angle').textContent = fmt(m.aH,1) + '° × ' + fmt(m.aV,1) + '°';
+  $('ro-champ').textContent = fmt(m.cw,2) + ' × ' + fmt(m.ch,2) + ' m';
+  const s = $('status');
+  if(m.pw > 1.01 && m.ph > 1.01){ s.textContent = 'Coupé en largeur et en hauteur : focale trop longue ou caméra trop près.'; s.className = 'status ko'; }
+  else if(m.pw > 1.01){ s.textContent = 'La largeur déborde : le bord gauche et le bord droit sont coupés.'; s.className = 'status ko'; }
+  else if(m.ph > 1.01){ s.textContent = 'La hauteur déborde : le haut et le bas sont coupés.'; s.className = 'status ko'; }
+  else { const marge = Math.max(m.pw, m.ph); s.textContent = 'L\'objet tient dans le cadre. Il occupe ' + fmt(marge*100,0) + ' % de la dimension la plus serrée.'; s.className = 'status'; }
+  checkDefi(m);
+}
+function link(rangeId, numId){
+  $(rangeId).addEventListener('input', () => { $(numId).value = $(rangeId).value; render(); });
+  $(numId).addEventListener('input', () => { const v = +$(numId).value; if(v >= +$(rangeId).min && v <= +$(rangeId).max) $(rangeId).value = v; render(); });
+}
+link('f','fn'); link('d','dn');
+$('capteur').addEventListener('change', render); $('objet').addEventListener('change', render);
+
+// ---------- Défis ----------
+const DEFIS = {
+  1: { set: {capteur:'26.2,13.8', objet:'2.5,1.5', d:9}, texte: 'Sujet zéro : le tableau de 2,5 × 1,5 m à 9 m, capteur Super 35. Trouvez la focale la plus longue qui montre encore tout le tableau.',
+       ok: m => m.pw <= 1.01 && m.ph <= 1.01 && Math.max(m.pw, m.ph) >= 0.97, bravo: 'Le tableau tient et remplit le cadre : c\'est la hauteur qui limite. Le sujet attend 83 mm.' },
+  2: { set: {capteur:'26.2,13.8', objet:'0.6,0.316', d:9}, texte: 'Même caméra, même distance : cadrez le détail de 60 × 31,6 cm au plus serré. Le curseur ne monte qu\'à 400 mm : tapez la valeur si besoin.',
+       ok: m => m.pw <= 1.01 && m.ph <= 1.01 && Math.max(m.pw, m.ph) >= 0.97, bravo: 'Les deux dimensions remplissent le cadre en même temps : le détail a les proportions du capteur. Le sujet attend 393 mm.' },
+  3: { set: {capteur:'9.6,5.4', objet:'4.7,1.0', d:30}, texte: 'Session 2016 : caméra 2/3 de pouce, la voiture de profil à 30 m doit occuper les deux tiers de la largeur.',
+       ok: m => m.pw >= 0.64 && m.pw <= 0.70, bravo: 'Deux tiers de 9,6 mm font 6,4 mm d\'image : le sujet attend 41 mm.' }
+};
+function checkDefi(m){
+  if(!st.defi) return;
+  const d = DEFIS[st.defi], btn = document.querySelector('[data-defi="'+st.defi+'"]');
+  if(d.ok(m)){ $('defi-msg').textContent = 'Réussi. ' + d.bravo; btn.classList.add('ok'); }
+  else { $('defi-msg').textContent = d.texte; }
+}
+document.querySelectorAll('[data-defi]').forEach(b => b.addEventListener('click', () => {
+  const d = DEFIS[b.dataset.defi]; st.defi = +b.dataset.defi;
+  document.querySelectorAll('[data-defi]').forEach(x => x.classList.remove('ok'));
+  $('capteur').value = d.set.capteur; $('objet').value = d.set.objet;
+  $('dn').value = d.set.d; $('d').value = Math.min(d.set.d, +$('d').max);
+  $('fn').value = 50; $('f').value = 50;
+  $('defi-msg').textContent = d.texte; render();
+  $('f').focus();
+}));
+
+// ---------- Rail : surligner le temps en cours ----------
+const links = [...document.querySelectorAll('.rail a')];
+const obs = new IntersectionObserver(es => { es.forEach(e => { if(e.isIntersecting){ links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id)); } }); }, {rootMargin: '-20% 0px -70% 0px'});
+document.querySelectorAll('.temps').forEach(s => obs.observe(s));
+
+window.addEventListener('resize', render);
+if(window.matchMedia){ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render); }
+render();
+</script>
+</body>
+</html>

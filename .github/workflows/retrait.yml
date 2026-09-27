@@ -1,0 +1,84 @@
+# Retire le site à la date inscrite dans le fichier EXPIRE, à la racine du dépôt.
+# Ce fichier est déposé dans le dépôt public par outils/publier.sh.
+name: Retrait du site
+
+on:
+  schedule:
+    - cron: "17 4 * * *"   # tous les jours, 4 h 17 UTC
+  workflow_dispatch:        # ou à la demande, depuis l'onglet Actions
+
+permissions:
+  contents: write
+
+jobs:
+  retrait:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Retirer le site si la date est passée
+        run: |
+          set -euo pipefail
+
+          if [ ! -f EXPIRE ]; then
+            echo "Pas de fichier EXPIRE : le site reste en ligne."
+            exit 0
+          fi
+
+          DATE_RETRAIT=$(tr -d '[:space:]' < EXPIRE)
+          AUJOURDHUI=$(date -u +%F)
+
+          if [ -z "$DATE_RETRAIT" ]; then
+            echo "Fichier EXPIRE vide : le site reste en ligne."
+            exit 0
+          fi
+
+          if [ ! "$AUJOURDHUI" \> "$DATE_RETRAIT" ]; then
+            echo "Nous sommes le $AUJOURDHUI, retrait prévu après le $DATE_RETRAIT. Rien à faire."
+            exit 0
+          fi
+
+          if [ -f .retire ]; then
+            echo "Site déjà retiré."
+            exit 0
+          fi
+
+          echo "Retrait du site, prévu après le $DATE_RETRAIT."
+          git rm -r --quiet --ignore-unmatch \
+            epreuve.html style.css config.js site.js seances img || true
+
+          cat > index.html <<'PAGE'
+          <!doctype html>
+          <html lang="fr">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="robots" content="noindex, nofollow">
+            <title>Page retirée</title>
+            <style>
+              html { color-scheme: light dark }
+              body { margin:0; min-height:100vh; display:grid; place-items:center;
+                     padding:24px; box-sizing:border-box; background:#FBFBF9; color:#1B2233;
+                     font:400 1.05rem/1.6 Georgia,"Times New Roman",serif }
+              div { max-width:36ch; text-align:center }
+              a { color:#005AAA }
+              @media (prefers-color-scheme: dark) {
+                body { background:#0F1524; color:#E6EAF2 } a { color:#7FB3EE }
+              }
+            </style>
+          </head>
+          <body>
+            <div>
+              <p>Ce site de cours n'est plus en ligne.</p>
+              <p><a href="mailto:j.gastebois@gmail.com">j.gastebois@gmail.com</a></p>
+            </div>
+          </body>
+          </html>
+          PAGE
+          date -u +%F > .retire
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Retrait automatique du site, prévu après le $DATE_RETRAIT"
+          git push
