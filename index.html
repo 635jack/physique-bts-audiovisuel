@@ -1,236 +1,26 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Physique pour l'audiovisuel</title>
-<meta name="description" content="Le cours de sciences physiques du BTS Métiers de l'audiovisuel, option montage et postproduction : contrat, séance type, annales, calculatrice, progression.">
-<meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
-<link rel="stylesheet" href="style.css">
-<style>
-.section{padding-block:.6rem}
-.contrat{display:grid; grid-template-columns:repeat(auto-fit,minmax(17rem,1fr)); gap:1rem; margin-block:1rem}
-.contrat .card{border-top:3px solid var(--accent)}
-.contrat .card:nth-child(2){border-top-color:var(--vert)}
-.niveaux{display:grid; grid-template-columns:repeat(auto-fit,minmax(15rem,1fr)); gap:.8rem; margin-block:1rem}
-.niveaux .n{background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:.9rem 1rem}
-.niveaux .n .niv{margin:0 0 .4rem; font-size:.8rem}
-.niveaux .n p{margin:0; font-size:.97rem}
-/* Frise de la séance type */
-.frise{list-style:none; margin:1.2rem 0; padding:0; display:grid; grid-template-columns:repeat(5,1fr); gap:.5rem}
-.frise li{background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:.8rem .9rem; display:flex; flex-direction:column; gap:.3rem; min-width:0}
-.frise .h{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.8rem; color:var(--accent); font-weight:500}
-.frise .t{font-family:"Archivo",Arial,sans-serif; font-weight:700; color:var(--navy); line-height:1.2}
-.frise .m{font-family:"Archivo",Arial,sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
-.frise p{font-size:.92rem; margin:0; color:var(--ink-soft)}
-.frise .bar{height:6px; border-radius:3px; background:var(--accent); opacity:.85}
-.frise li:nth-child(1) .bar{width:12%} .frise li:nth-child(2) .bar{width:34%} .frise li:nth-child(3) .bar{width:100%} .frise li:nth-child(4) .bar{width:90%} .frise li:nth-child(5) .bar{width:22%}
-@media (max-width:900px){ .frise{grid-template-columns:1fr 1fr} } @media (max-width:520px){ .frise{grid-template-columns:1fr} }
-/* Fiche épreuve */
-.fiche{display:grid; grid-template-columns:repeat(auto-fit,minmax(11rem,1fr)); gap:.6rem; margin-block:1rem}
-.fiche div{background:var(--fond-gris); border-radius:4px; padding:.6rem .8rem}
-.fiche .k{font-family:"Archivo",Arial,sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
-.fiche .v{font-family:"Archivo",Arial,sans-serif; font-weight:700; color:var(--navy); font-size:1.05rem}
-.fiche .s{font-size:.88rem; color:var(--ink-soft)}
-/* Compagnon */
-.compagnon{display:grid; grid-template-columns:repeat(auto-fit,minmax(14rem,1fr)); gap:1rem; margin-block:1rem}
-.compagnon .card{display:flex; flex-direction:column; gap:.3rem}
-.compagnon .ic{width:40px; height:40px; border-radius:8px; background:var(--fond-bleu); display:grid; place-items:center; color:var(--accent); margin-bottom:.3rem}
-.compagnon .ic svg{width:22px; height:22px}
-/* Progression */
-.tbl td:first-child{font-family:"IBM Plex Mono",ui-monospace,monospace; color:var(--ink-soft); white-space:nowrap}
-.tbl td .s{font-family:"Archivo",Arial,sans-serif; font-weight:700; color:var(--navy)}
-.tbl td .avenir{font-family:"Archivo",Arial,sans-serif; font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft)}
-.tbl td .lien{font-family:"Archivo",Arial,sans-serif; font-weight:700}
-.tbl tr.modele td{background:var(--fond-bleu)}
-.toc{display:flex; flex-wrap:wrap; gap:.4rem .9rem; margin-top:1.2rem; font-family:"Archivo",Arial,sans-serif; font-size:.9rem; font-weight:600}
-.toc a{text-decoration:none; color:var(--ink-soft); border:1px solid var(--line); border-radius:999px; padding:.25rem .75rem; background:var(--surface)}
-.toc a:hover{color:var(--navy); border-color:var(--accent)}
-</style>
-<script src="config.js"></script>
-<script src="site.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Page retirée</title>
+  <style>
+    html { color-scheme: light dark }
+    body { margin:0; min-height:100vh; display:grid; place-items:center;
+           padding:24px; box-sizing:border-box; background:#FBFBF9; color:#1B2233;
+           font:400 1.05rem/1.6 Georgia,"Times New Roman",serif }
+    div { max-width:36ch; text-align:center }
+    a { color:#005AAA }
+    @media (prefers-color-scheme: dark) {
+      body { background:#0F1524; color:#E6EAF2 } a { color:#7FB3EE }
+    }
+  </style>
 </head>
 <body>
-
-<header class="topbar">
-  <div class="wrap">
-    <a class="brand" href="index.html"><span class="t">Sciences physiques</span><span class="s">BTS Métiers de l'audiovisuel, option montage et postproduction</span></a>
-    <nav class="nav" aria-label="Navigation">
-      <a href="index.html" aria-current="page">Le cours</a>
-      <a href="seances/focale.html">Séance 11</a>
-      <a href="epreuve.html">L'épreuve E3</a>
-    </nav>
+  <div>
+    <p>Ce site de cours n'est plus en ligne.</p>
+    <p><a href="mailto:j.gastebois@gmail.com">j.gastebois@gmail.com</a></p>
   </div>
-</header>
-
-<section class="hero">
-  <div class="wrap">
-    <div class="eyebrow">Le cours en ligne · Jacques Gastebois</div>
-    <h1>La physique qu'on voit, qu'on entend et qu'on mesure</h1>
-    <p class="lead">Ce site rassemble le cours de sciences physiques tel que je propose de le conduire, séance après séance. Chaque séance part d'un objet ou d'une simulation, va vers la formule, et se termine sur un exercice tiré d'un vrai sujet de BTS.</p>
-    <div class="meta">
-      <span><b>Deux niveaux</b>, 3 h par semaine, une semaine sur deux</span>
-      <span>Épreuve visée : <b>E3</b>, physique et technologie des équipements, coefficient 3</span>
-      <span>Programme officiel : annexe I, <b>partie P4</b></span>
-    </div>
-    <nav class="toc" aria-label="Sommaire">
-      <a href="#contrat">Le contrat</a><a href="#seance">La séance type</a><a href="#annales">Les annales</a><a href="#calculatrice">La calculatrice</a><a href="#compagnon">Le compagnon</a><a href="#progression">La progression</a><a href="#ponts">Avec les autres cours</a>
-    </nav>
-  </div>
-</section>
-
-<main class="wrap">
-
-<section class="section" id="contrat">
-  <h2>Le contrat, en deux promesses</h2>
-  <div class="contrat">
-    <div class="card">
-      <h3>Que chacun ait la moyenne</h3>
-      <p>Y compris celui ou celle qui n'a pas fait de physique au lycée. Sur les annales, la moitié des questions de physique sont des applications directes d'une formule que le sujet rappelle, avec des unités à ne pas mélanger. Un étudiant qui traite ces questions proprement a la moyenne. Le cours vise d'abord celles-là, et le montre chiffres à l'appui.</p>
-    </div>
-    <div class="card">
-      <h3>Que personne ne s'ennuie</h3>
-      <p>Chaque séance a un palier « pour aller plus loin » : établir une relation, discuter un résultat, justifier un choix technique. C'est ce qu'attend un correcteur pour les notes au-dessus de 14, et c'est ce qui occupe ceux qui vont vite pendant que les autres consolident.</p>
-    </div>
-  </div>
-  <p>Concrètement, chaque question d'exercice porte l'un des trois niveaux, et le barème de chaque extrait d'annale montre ce que rapporte chaque niveau.</p>
-  <div class="niveaux">
-    <div class="n"><span class="niv socle">Socle</span><p>Lire un document, appliquer une formule donnée, convertir une unité. La moyenne se construit là.</p></div>
-    <div class="n"><span class="niv maitrise">Maîtrise</span><p>Enchaîner deux étapes, choisir la bonne formule, vérifier un ordre de grandeur.</p></div>
-    <div class="n"><span class="niv loin">Plus loin</span><p>Établir une relation, comparer deux solutions, répondre à la problématique par un argument.</p></div>
-  </div>
-</section>
-
-<section class="section" id="seance">
-  <h2>Une séance de trois heures</h2>
-  <p>Les étudiants arrivent de trois jours en entreprise. Une séance tient si on change de mode toutes les 45 minutes, et si on commence par quelque chose à regarder plutôt que par quelque chose à écouter.</p>
-  <ol class="frise">
-    <li><span class="h">0:00 · 10 min</span><span class="t">Accueil</span><span class="bar"></span><span class="m">Projection</span><p>Les objectifs de la séance, le lien avec l'épreuve, le QR code du compagnon.</p></li>
-    <li><span class="h">0:10 · 30 min</span><span class="t">Mise en bouche</span><span class="bar"></span><span class="m">Objet + simulation</span><p>Une maquette sur la table, ou une simulation à manipuler sur téléphone. Des défis, pas de formule.</p></li>
-    <li><span class="h">0:40 · 60 min</span><span class="t">Les notions</span><span class="bar"></span><span class="m">Tableau</span><p>De ce qu'on vient de voir vers la formule, par paliers. Le geste calculatrice du jour.</p></li>
-    <li><span class="h">1:50 · 55 min</span><span class="t">L'annale</span><span class="bar"></span><span class="m">TD + tableau</span><p>Un extrait d'un vrai sujet. Dix minutes seul, puis une question par étudiant au tableau, puis la correction commune.</p></li>
-    <li><span class="h">2:45 · 15 min</span><span class="t">Clôture</span><span class="bar"></span><span class="m">Projection</span><p>Trois lignes à retenir, trois questions à l'oral, le QR code pour réviser, la question qui ouvre la séance suivante.</p></li>
-  </ol>
-  <div class="bloc"><div class="bt">La séance modèle</div>
-    <p><a href="seances/focale.html"><strong>Séance 11, Focale et cadrage</strong></a> est construite en entier sur ce modèle : simulation interactive, notions par paliers, extrait du sujet zéro traité en TD avec sa correction, extrait de la session 2016 pour ceux qui ont fini. C'est la forme que prendront toutes les séances.</p>
-  </div>
-</section>
-
-<section class="section" id="annales">
-  <h2>Les annales dès la première séance</h2>
-  <div class="fiche">
-    <div><div class="k">Durée</div><div class="v">6 heures</div><div class="s">3 h de technologie, puis 3 h de physique</div></div>
-    <div><div class="k">Copies</div><div class="v">Deux</div><div class="s">ramassées ensemble à la fin</div></div>
-    <div><div class="k">Coefficient</div><div class="v">3</div><div class="s">1,5 par partie, pour l'option montage et postproduction</div></div>
-    <div><div class="k">Correcteurs</div><div class="v">Deux</div><div class="s">un professeur de technologie, un de physique</div></div>
-    <div><div class="k">Sujet</div><div class="v">30 à 40 pages</div><div class="s">dont la moitié de documents constructeur</div></div>
-    <div><div class="k">Physique</div><div class="v">5 à 7 sous-parties</div><div class="s">indépendantes, avec les formules rappelées</div></div>
-  </div>
-  <p>Un sujet de six heures fait peur à un étudiant de première année, donc personne n'en voit un entier avant la fin de la première année. En revanche, <strong>aucune séance ne se termine sans une question d'annale</strong>, sur la notion qui vient d'être vue, présentée avec son cartouche d'origine : ils doivent savoir que c'est un vrai sujet, et sortir de la salle en ayant réussi une question de BTS.</p>
-  <div class="tbl"><table>
-    <thead><tr><th>Quand</th><th>Quoi</th><th>Forme</th></tr></thead>
-    <tbody>
-      <tr><td>1re année, séance 1</td><td>La page de garde et le sommaire d'un sujet</td><td>Projetés, dix minutes, pour démystifier</td></tr>
-      <tr><td>1re année, chaque séance</td><td>Une question d'annale sur la notion du jour</td><td>En TD dans le troisième temps, corrigée en séance</td></tr>
-      <tr><td>1re année, séance 7</td><td>Mini-sujet : trois questions sur les décibels et le son</td><td>45 minutes, sur copie, non noté</td></tr>
-      <tr><td>1re année, séance 14</td><td>Demi-épreuve : deux sous-parties de physique</td><td>1 h 30 en conditions, calculatrice, sujet imprimé avec ses documents</td></tr>
-      <tr><td>2e année, chaque séance</td><td>Une question du jour, plus une question de première année tirée au sort</td><td>Entretien des acquis</td></tr>
-      <tr><td>2e année, séances 6 et 10</td><td>Demi-épreuves notées</td><td>1 h 30, corrigées la séance suivante</td></tr>
-      <tr><td>2e année, séance 13</td><td>Méthodologie de l'écrit : un sujet décortiqué, la gestion des six heures</td><td>Voir <a href="epreuve.html">la page sur l'épreuve</a></td></tr>
-      <tr><td>2e année, séance 14</td><td>La partie physique en conditions</td><td>3 heures</td></tr>
-    </tbody>
-  </table></div>
-  <h3>Ce qui revient dans les sujets</h3>
-  <p>Sur les deux sujets analysés (sujet zéro de l'option image, session 2016 de l'option ingénierie), trois blocs sont présents dans les deux, et pèsent le plus lourd : <strong>l'optique de prise de vue</strong> (focale, cadrage, angle de champ, profondeur de champ), <strong>la photométrie des projecteurs</strong> (éclairement, intensité, distance, température de couleur, filtres) et <strong>les décibels</strong> sous toutes leurs formes (dB SPL, dBm, atténuation, gain). Ils occupent six des quatorze séances de première année. Les sujets propres à l'option montage et postproduction, à récupérer auprès de l'école, tireront sans doute davantage vers les débits, la compression, la colorimétrie et l'échantillonnage, qui sont en deuxième année.</p>
-</section>
-
-<section class="section" id="calculatrice">
-  <h2>La calculatrice</h2>
-  <p>Elle est autorisée à l'épreuve, c'est écrit sur la première page de chaque sujet. Depuis la session 2020, les calculatrices graphiques doivent être passées en mode examen, ce qui efface tout ce qu'un étudiant y aurait stocké ; les calculatrices scientifiques sans mémoire sont autorisées sans condition. Le téléphone ne l'est jamais.</p>
-  <div class="bloc retenir"><div class="bt">Ce que je propose à l'école</div>
-    <p><strong>Un seul modèle pour toute la classe, scientifique et non graphique, à une vingtaine d'euros</strong>, sur la liste de fournitures. Tout ce que demandent les annales tient dedans : puissances de dix, logarithmes, tangente et arc tangente en degrés. Avec un modèle unique, « touche SHIFT puis log » se dit une fois pour toute la salle, et chaque séance comporte un <strong>geste calculatrice du jour</strong>, dix minutes, tapé par tout le monde en même temps et vérifié sur un résultat connu. Sur l'année, ces quatorze gestes font toute la calculatrice de l'épreuve. Ceux qui ont déjà une graphique du lycée la gardent, et apprennent dès la séance 1 à activer son mode examen.</p>
-  </div>
-</section>
-
-<section class="section" id="compagnon">
-  <h2>Le compagnon de chaque séance</h2>
-  <p>Chaque séance a un carnet NotebookLM, construit à partir de la page de la séance et de l'extrait d'annale, relu avant d'être partagé. Son QR code est affiché au début et à la fin du cours : les étudiants savent qu'en sortant, ils ont accès à trois choses depuis leur téléphone.</p>
-  <div class="compagnon">
-    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="13" width="4" height="7" rx="1.5"/><rect x="17" y="13" width="4" height="7" rx="1.5"/></svg></div><h3>Un podcast de 8 minutes</h3><p>La séance racontée à deux voix, avec les chiffres de l'exercice. À écouter dans les transports entre l'entreprise et l'école.</p></div>
-    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M7 3h14v12"/></svg></div><h3>Des cartes de révision</h3><p>Formules, unités, valeurs de l'exercice. Elles servent la veille des demi-épreuves et de l'examen.</p></div>
-    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg></div><h3>Un quiz de dix questions</h3><p>Non noté. Les mauvaises réponses proposées sont les erreurs que font les étudiants à l'examen : radians, unités mélangées, un seul calcul au lieu de deux.</p></div>
-  </div>
-</section>
-
-<section class="section" id="progression">
-  <h2>La progression</h2>
-  <p>Le référentiel ne découpe pas le programme par année et demande de construire la progression « à partir de thèmes ou d'applications relevant du champ professionnel et non à partir de savoirs ». Principe retenu : <strong>la première année couvre ce qui se voit, s'entend et se mesure ; la deuxième entre dans la machine et prépare l'épreuve.</strong> Quatorze séances par niveau, les deux dernières servant de réserve selon le calendrier d'alternance.</p>
-
-  <h3>Première année</h3>
-  <div class="tbl"><table>
-    <thead><tr><th>#</th><th>Séance</th><th>Sur la table</th><th>Extrait d'annale en fin de séance</th><th>Page</th></tr></thead>
-    <tbody>
-      <tr><td>1</td><td><span class="s">Ce que mesure un instrument</span><br>Grandeurs, unités, ordres de grandeur</td><td>Multimètre, oscilloscope, une chaîne audio</td><td>La page de garde et le sommaire d'un sujet</td><td><span class="avenir">à venir</span></td></tr>
-      <tr><td>2</td><td><span class="s">Électricité</span><br>Tension, courant, loi d'Ohm, puissance</td><td>Alimenter un circuit, lire un schéma</td><td>Sujet zéro, techno 4.7 et 4.8 : combien de projecteurs de 1 kW sur une prise 16 A</td><td><span class="avenir">à venir</span></td></tr>
-      <tr><td>3</td><td><span class="s">Signaux périodiques</span><br>Période, fréquence, amplitude, valeur efficace</td><td>Un signal audio à l'oscilloscope</td><td>Lecture d'une période et d'une amplitude sur un oscillogramme</td><td><span class="avenir">à venir</span></td></tr>
-      <tr><td>4</td><td><span class="s">Les décibels</span><br>dB, dBu, dBV, dBFS, l'échelle logarithmique</td><td>Une console, un vumètre</td><td>Sujet zéro, physique 3.4 et 3.5 : atténuation d'une fibre en dB</td><td><span class="avenir">à venir</span></td></tr>
-      <tr><td>5</td><td><span class="s">Spectre et harmoniques</span><br>Fondamental, harmoniques, timbre</td><td>Analyse spectrale d'une voix</td><td>Lecture d'un spectre</td><td><span class="avenir">à venir</span></td></tr>
-      <tr><td>6</td><td><span class="s">Le son</span><br>Propagation, célérité, longueur d'onde</td><td>Mesurer la vitesse du son dans la salle</td><td>Session 2016, physique 7.1 : le niveau à 35 m d'une voiture de course</td><td><span class="avenir">à venir</span></td></tr>
-      <tr><td>7</td><td><span class="s">Niveau sonore et perception</span><br>Sonie, isosonie, dBA</td><td>Sonomètre : mesuré contre perçu</td><td>Mini-sujet : sujet zéro 5.2 et 5.3, session 2016 7.2</td><td><span class="avenir">à venir</span></td></tr>
-      <tr><td>8</td><td><span class="s">Acoustique des locaux</span><br>Réverbération, absorption, traitement</td><td>Résonateurs, mesure du temps de réverbération de la salle</td><td>Formule de Sabine sur leur propre salle</td><td><span class="avenir">à venir</span></td></tr>
-      <tr><td>9</td><td><span class="s">La lumière</span><br>Spectre visible, sources et leurs spectres</td><td>Spectroscope : LED, tungstène, fluorescent, soleil</td><td>Sujet zéro, techno 4.1 : comparer un Fresnel tungstène et un Fresnel LED</td><td><span class="avenir">à venir</span></td></tr>
-      <tr><td>10</td><td><span class="s">Photométrie</span><br>Flux, intensité, éclairement, corps noir, Mired</td><td>Luxmètre en plateau, filtres de conversion</td><td>Sujet zéro, physique 2.1 à 2.6 ; session 2016, physique 5.1 à 5.3 et 5.6</td><td><span class="avenir">à venir</span></td></tr>
-      <tr class="modele"><td>11</td><td><span class="s">Focale et cadrage</span><br>Plan focal, proportion, angle de champ</td><td>Une lentille, un mètre ruban, leurs téléphones, la simulation</td><td>Sujet zéro, physique 1.1 à 1.3 et 5.1 ; session 2016, physique 6</td><td><a class="lien" href="seances/focale.html">Séance modèle</a></td></tr>
-      <tr><td>12</td><td><span class="s">Ouverture et profondeur de champ</span><br>Diaphragme, nombre d'ouverture, cercle de netteté, conjugaison</td><td>Jeu de diaphragmes, banc d'optique, un objectif démonté</td><td>Sujet zéro, physique 4.1 à 4.5 : la carriole à 25 m sera-t-elle nette ?</td><td><span class="avenir">à venir</span></td></tr>
-      <tr><td>13</td><td><span class="s">L'œil</span><br>Pouvoir séparateur, persistance rétinienne</td><td>Disque de Newton</td><td>Sujet zéro, techno 1.7 à 1.9 : la diffraction et la taille des photosites</td><td><span class="avenir">à venir</span></td></tr>
-      <tr><td>14</td><td><span class="s">Demi-épreuve et bilan</span></td><td></td><td>Deux sous-parties de physique en conditions, 1 h 30, puis correction</td><td><span class="avenir">à venir</span></td></tr>
-    </tbody>
-  </table></div>
-
-  <h3>Deuxième année</h3>
-  <div class="tbl"><table>
-    <thead><tr><th>#</th><th>Séance</th><th>Sur la table</th><th>Extrait d'annale en fin de séance</th></tr></thead>
-    <tbody>
-      <tr><td>1</td><td><span class="s">Reprise et diagnostic</span><br>Ce qui reste, ce qu'ils ont vu en entreprise</td><td>Mesures rapides, évaluation non notée</td><td>Retour sur la demi-épreuve de juin</td></tr>
-      <tr><td>2</td><td><span class="s">Amplification</span><br>Gain, bande passante, impédances, adaptation</td><td>Mesurer un amplificateur</td><td>Session 2016, physique 2.1 à 2.3 : l'impédance qui transmet le maximum de puissance</td></tr>
-      <tr><td>3</td><td><span class="s">Filtrage analogique</span><br>Gabarits, types de filtres, Bode</td><td>Tracer la réponse d'un égaliseur</td><td>Lecture d'un diagramme de Bode</td></tr>
-      <tr><td>4</td><td><span class="s">Échantillonnage</span><br>Shannon, repliement</td><td>Le repliement en son, puis sur une roue filmée</td><td>Débit d'un flux audio : 48 kHz, 16 bits, 8 canaux</td></tr>
-      <tr><td>5</td><td><span class="s">Quantification</span><br>Bits, dynamique, bruit de quantification</td><td>Dégrader un fichier et écouter</td><td>Sujet zéro, techno 2.8 : un gain de 6 dB, combien de bruit</td></tr>
-      <tr><td>6</td><td><span class="s">La chaîne numérique</span><br>Conversion, traitement, reconstruction</td><td>Appliquer un filtre et mesurer son effet</td><td>Demi-épreuve notée, 1 h 30</td></tr>
-      <tr><td>7</td><td><span class="s">Colorimétrie, les bases</span><br>Primaires, synthèses additive et soustractive</td><td>Trois sources colorées et des filtres</td><td>Mélange de deux lumières</td></tr>
-      <tr><td>8</td><td><span class="s">Colorimétrie appliquée</span><br>Coordonnées, espaces, gamut, balance des blancs</td><td>Étalonnage d'un moniteur</td><td>Session 2016, physique 5.4 et 5.5 : le mélange sur le diagramme de chromaticité</td></tr>
-      <tr><td>9</td><td><span class="s">Capteurs</span><br>Photosite, Bayer, résolution, bruit</td><td>Matrice de Bayer agrandie, un capteur sous la loupe</td><td>Sujet zéro, techno 1.2 à 1.5 : ce qu'est un pixel 4K</td></tr>
-      <tr><td>10</td><td><span class="s">Débits, sous-échantillonnage et compression</span><br>4:2:0, Go par heure, taux de compression</td><td>Comparer des codecs sur une même image</td><td>Sujet zéro, techno 5.2 à 6.8 ; session 2016, techno 2.1.5 et 2.3.5 : demi-épreuve notée</td></tr>
-      <tr><td>11</td><td><span class="s">Lignes et fibres</span><br>Impédance caractéristique, réflexions, Descartes</td><td>Une liaison longue mal adaptée</td><td>Sujet zéro, physique 3.1 à 3.3 : la réfraction à l'entrée d'une fibre</td></tr>
-      <tr><td>12</td><td><span class="s">Transmissions numériques</span><br>Débit, modulations, bilan de liaison</td><td>Budget d'une liaison</td><td>Session 2016, physique 1, 3 et 4 : la caméra HF des 24 Heures du Mans</td></tr>
-      <tr><td>13</td><td><span class="s">Méthodologie de l'épreuve</span></td><td>Un sujet complet, décortiqué</td><td>La gestion des six heures, ce qui rapporte des points</td></tr>
-      <tr><td>14</td><td><span class="s">La partie physique en conditions</span></td><td></td><td>3 heures, correction écrite</td></tr>
-    </tbody>
-  </table></div>
-</section>
-
-<section class="section" id="ponts">
-  <h2>Avec les autres enseignements</h2>
-  <p>La physique représente quatre heures sur les trente et une de la semaine. Elle n'a d'intérêt que reliée au reste.</p>
-  <ul>
-    <li><strong>Technologie des équipements et des supports.</strong> Même épreuve, même copie. La technologie présente les machines, la physique donne les lois. Une grille de qui traite quoi, construite ensemble à la rentrée, et un examen blanc commun au printemps de deuxième année.</li>
-    <li><strong>Technique et mise en œuvre.</strong> Onze heures de travaux pratiques par semaine : la source des exemples. La colorimétrie doit précéder le module d'étalonnage, pas le suivre.</li>
-    <li><strong>Culture audiovisuelle et artistique.</strong> L'acoustique des lieux de production figure dans les deux programmes : à se répartir.</li>
-    <li><strong>Anglais.</strong> Les documents des sujets sont en anglais. La liste des termes de chaque séance est fournie à la collègue : focal length, sensor, illuminance, gain, bit rate.</li>
-  </ul>
-</section>
-
-</main>
-
-<footer>
-  <div class="wrap">
-    <span>Jacques Gastebois · j.gastebois@gmail.com</span>
-    <span>Sources : référentiel du BTS Métiers de l'audiovisuel, annexe I partie P4 et définition de l'épreuve E3 ; sujet zéro option image ; sujet de la session 2016 option ingénierie et exploitation</span>
-  <span>© Jacques Gastebois, 2026. Document de travail communiqué dans le cadre d'une candidature, à ne pas rediffuser.</span>
-  </div>
-</footer>
 </body>
 </html>
